@@ -1,0 +1,49 @@
+server:
+  port: 9107
+
+spring:
+  cloud:
+    refresh:
+      refreshable: none
+  application:
+    name: zipkin-server
+  main:
+    banner-mode: 'off'
+    lazy-initialization: true
+  datasource:
+    schema: classpath:/sql/schema.sql
+    sql-script-encoding: UTF-8
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/zipkin?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+    initialization-mode: always
+    continue-on-error: true
+  jpa:
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: update
+  sleuth:
+    enabled: false
+
+
+zipkin:
+  storage:
+    type: mysql
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://10.32.15.71:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    lease-renewal-interval-in-seconds: 1
+    lease-expiration-duration-in-seconds: 3
+
+management:
+  metrics:
+    web:
+      server:
+        auto-time-requests: false
